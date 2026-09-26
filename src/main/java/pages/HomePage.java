@@ -8,44 +8,56 @@ import org.openqa.selenium.support.PageFactory;
 import utils.WaitUtils;
 
 public class HomePage {
-	private WebDriver driver;
-	private WaitUtils waitUtils;
 
-	public HomePage(WebDriver driver) {
-		this.driver = driver;
-		PageFactory.initElements(driver, this);
-		waitUtils = new WaitUtils(driver);
-	}
+    private WebDriver driver;
+    private WaitUtils waitUtils;
 
-	@FindBy(xpath = "//span[text()='Search jobs here']")
-	private WebElement placeholderSpan;
+    public HomePage(WebDriver driver) {
+        this.driver = driver;
+        PageFactory.initElements(driver, this);
+        waitUtils = new WaitUtils(driver);
+    }
 
-	@FindBy(xpath = "//input[contains(@placeholder, 'designation')]")
-	private WebElement skillInput;
+    // Search jobs button
+    @FindBy(xpath = "//button[@aria-label='Search jobs here']")
+    private WebElement searchJobsButton;
 
-	@FindBy(id = "experienceDD")
-	private WebElement experienceDropdown;
+    // Skill / designation input
+    @FindBy(xpath = "//input[contains(@placeholder, 'designation')]")
+    private WebElement skillInput;
 
-	@FindBy(xpath = "//button[@class='nI-gNb-sb__icon-wrapper']/span[@class='ni-gnb-icn ni-gnb-icn-search']")
-	private WebElement searchButton;
+    // Experience dropdown
+    @FindBy(id = "experienceDD")
+    private WebElement experienceDropdown;
 
-	private final By experience3YearsOption = By.xpath("//ul[contains(@class, 'dropdown')]//li[@title='3 years']");
+    // Search button
+    @FindBy(xpath = "//button[@class='nI-gNb-sb__icon-wrapper']")
+    private WebElement searchButton;
 
-	public void searchJob(String keyword) {
+    private final By experience3YearsOption =
+            By.xpath("//ul[contains(@class, 'dropdown')]//li[@title='4 years']");
 
-		waitUtils.waitForElementToBeVisible(placeholderSpan);
-		placeholderSpan.click();
+    public void searchJob(String keyword) {
 
-		waitUtils.waitForElementToBeVisible(skillInput);
-		skillInput.sendKeys(keyword);
+        // Click "Search jobs here"
+        waitUtils.waitForElementToBeClickable(searchJobsButton);
+        searchJobsButton.click();
 
-		waitUtils.waitForElementToBeVisible(experienceDropdown);
-		experienceDropdown.click();
-		WebElement experienceOption = waitUtils.waitForElementToBeClickable(experience3YearsOption);
-		experienceOption.click();
+        // Enter job keyword
+        waitUtils.waitForElementToBeVisible(skillInput);
+        skillInput.sendKeys(keyword);
 
-		waitUtils.waitForElementToBeClickable(searchButton);
-		searchButton.click();
-	}
+        // Select experience
+        waitUtils.waitForElementToBeClickable(experienceDropdown);
+        experienceDropdown.click();
 
+        WebElement experienceOption =
+                waitUtils.waitForElementToBeClickable(experience3YearsOption);
+
+        experienceOption.click();
+
+        // Click search
+        waitUtils.waitForElementToBeClickable(searchButton);
+        searchButton.click();
+    }
 }
